@@ -48,6 +48,6 @@ class Kernel extends BaseKernel
             'annotations' => false,
         ]);
 
-        $container->extension('dbp_verity_connector_verapdf_bundle', []);
+        $container->extension('dbp_verity_connector_verapdf', []);
     }
 }

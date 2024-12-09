@@ -9,7 +9,7 @@
         "ext-json": "*",
         "api-platform/core": "^3.2",
         "dbp/relay-core-bundle": "^0.1.181",
-        "dbp/relay-verity-bundle": "^0.1.0",
+        "dbp/relay-verity-bundle": "dev-main",
         "symfony/config": "^6.4",
         "symfony/dependency-injection": "^6.4",
         "symfony/framework-bundle": "^6.4",
@@ -65,8 +65,8 @@
     },
     "repositories": {
         "relay-verity-bundle": {
-            "type": "path",
-            "url": "../relay-verity-bundle"
+            "type": "git",
+            "url": "https://github.com/digital-blueprint/relay-verity-bundle.git"
         }
     }
 }
