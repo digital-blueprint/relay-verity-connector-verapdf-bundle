@@ -1,0 +1,5 @@
+services:
+  Dbp\Relay\VerityConnectorVerapdfBundle\Service\:
+    resource: '../../Service'
+    autowire: true
+    autoconfigure: true
