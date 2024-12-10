@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Dbp\Relay\VerityConnectorVerapdfBundle\DependencyInjection;
 
 use Dbp\Relay\CoreBundle\Extension\ExtensionTrait;
-use Dbp\Relay\VerityBundle\Service\ConfigurationService;
+//use Dbp\Relay\VerityBundle\Service\ConfigurationService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-class DbpRelayVerityConnectorVerapdfBundleExtension extends ConfigurableExtension
+class DbpRelayVerityConnectorVerapdfExtension extends ConfigurableExtension
 {
     use ExtensionTrait;
 
@@ -23,7 +23,8 @@ class DbpRelayVerityConnectorVerapdfBundleExtension extends ConfigurableExtensio
         );
         $loader->load('services.yaml');
 
-        $definition = $container->getDefinition(ConfigurationService::class);
-        $definition->addMethodCall('setConfig', [$mergedConfig]);
+        // TODO: Implement service configuration
+//        $definition = $container->getDefinition(ConfigurationService::class);
+//        $definition->addMethodCall('setConfig', [$mergedConfig]);
     }
 }
