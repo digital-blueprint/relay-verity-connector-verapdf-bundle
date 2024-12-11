@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db4251b5401e0a62e7a8939c4165c1c0",
+    "content-hash": "b809ad4d4e4d25e73666e92c8fe3ac0b",
     "packages": [
         {
             "name": "api-platform/core",
@@ -331,11 +331,11 @@
         },
         {
             "name": "dbp/relay-verity-bundle",
-            "version": "dev-main",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/digital-blueprint/relay-verity-bundle.git",
-                "reference": "0a6b81700eb7940b75f08cb2a68aae210694c92a"
+                "reference": "9670c2aa37b9ffcceaadcaf0d90e50bca375454b"
             },
             "require": {
                 "api-platform/core": "^3.2",
@@ -362,7 +362,6 @@
                 "symfony/phpunit-bridge": "^7.0.4",
                 "vimeo/psalm": "^5.22.2"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -403,7 +402,7 @@
                 "AGPL-3.0-or-later"
             ],
             "description": "A validation bundle for the Relay API gateway",
-            "time": "2024-12-09T05:08:19+00:00"
+            "time": "2024-12-10T09:24:54+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -10207,9 +10206,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "dbp/relay-verity-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
