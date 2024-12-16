@@ -1,7 +1,7 @@
 # DbpRelayVerityConnectorVerapdfBundle
 
 [GitHub](https://github.com/{{bundle-path}}) |
-[Packagist](https://packagist.org/packages/dbp/relay-verity-connector-verapdf-bundle) |
+[Packagist](https://packagist.org/packages/dbp/relay-verity-connector-verapdf-bundle)
 
 The Verity Connector VeraPDF bundle provides an API for interacting with VeraPDF wich is a PDF validating service.
 

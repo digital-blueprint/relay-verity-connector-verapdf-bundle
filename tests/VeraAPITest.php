@@ -4,17 +4,30 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\VerityConnectorVerapdfBundle\Tests;
 
-use Dbp\Relay\VerityBundle\Service\PDFAValidationAPI;
+use Dbp\Relay\VerityConnectorVerapdfBundle\Service\ConfigurationService;
+use Dbp\Relay\VerityConnectorVerapdfBundle\Service\PDFAValidationAPI;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 class VeraAPITest extends KernelTestCase
 {
+    private ConfigurationService $config;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->config = new ConfigurationService();
+        $this->config->setConfig([
+            'url' => 'https://localhost.lan',
+            'maxsize' => 16,
+        ]);
+    }
+
     public function testValidResult(): void
     {
         $httpClient = new MockHttpClient($this->validMockResponse());
-        $veraApi = new PDFAValidationAPI('http://localhost/', $httpClient);
+        $veraApi = new PDFAValidationAPI($httpClient, $this->config);
 
         $this->assertNotNull($veraApi);
 
@@ -22,13 +35,13 @@ class VeraAPITest extends KernelTestCase
         // This tests that a valid PDF is processed correctly.
         $result = $veraApi->validate('', 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
 
-        $this->assertEquals($result->message, 'PDF file is compliant with Validation Profile requirements.');
+        $this->assertEquals('PDF file is compliant with Validation Profile requirements.', $result->message);
     }
 
     public function testInvalidResult(): void
     {
         $httpClient = new MockHttpClient($this->invalidMockResponse());
-        $veraApi = new PDFAValidationAPI('http://localhost/', $httpClient);
+        $veraApi = new PDFAValidationAPI($httpClient, $this->config);
 
         $this->assertNotNull($veraApi);
 
@@ -36,13 +49,13 @@ class VeraAPITest extends KernelTestCase
         // This tests that an invalid PDF is processed correctly.
         $result = $veraApi->validate('', 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
 
-        $this->assertEquals($result->message, 'PDF file is not compliant with Validation Profile requirements.');
+        $this->assertEquals('PDF file is not compliant with Validation Profile requirements.', $result->message);
     }
 
     public function testNotFound(): void
     {
         $httpClient = new MockHttpClient($this->errorMockResponse());
-        $veraApi = new PDFAValidationAPI('http://localhost/', $httpClient);
+        $veraApi = new PDFAValidationAPI($httpClient, $this->config);
 
         $this->assertNotNull($veraApi);
 
@@ -50,7 +63,7 @@ class VeraAPITest extends KernelTestCase
         // This tests that a network error is processed correctly.
         $result = $veraApi->validate('', 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
 
-        $this->assertEquals($result->message, 'Network Error');
+        $this->assertEquals('Network Error', $result->message);
     }
 
     private function validMockResponse(): MockResponse

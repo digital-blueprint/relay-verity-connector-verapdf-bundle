@@ -20,19 +20,27 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
     use LoggerAwareTrait;
 
     public function __construct(
-        private readonly string $serverUrl,
-        private readonly HttpClientInterface $httpClient)
+        private readonly HttpClientInterface $httpClient,
+        private readonly ConfigurationService $configurationService)
     {
     }
 
     public function validate($fileContent, $fileName, $fileSize, $sha1sum, $config, $mimetype): VerityResult
     {
+        $bundleConfig = $this->configurationService->getConfig();
+        $serverUrl = $bundleConfig['url'];
+        $maxsize =  $bundleConfig['maxsize'];
+
+        if ($fileSize > $maxsize) {
+            throw new \Exception("File size exceeded maxsize: {$fileSize} > {$maxsize}");
+        }
+
         $checkConfig = json_decode($config, true);
         if (!isset($checkConfig['flavour']) || $checkConfig['flavour'] === '') {
             throw new \Exception("Required config key 'flavour' is missing.");
         }
         $flavour = $checkConfig['flavour'];
-        $url = $this->serverUrl.'/api/validate/'.$flavour.'/';
+        $url = "$serverUrl/api/validate/$flavour/";
 
         $fileHandle = fopen('data://text/plain,'.urlencode($fileContent), 'rb');
         stream_context_set_option($fileHandle, 'http', 'filename', $fileName);

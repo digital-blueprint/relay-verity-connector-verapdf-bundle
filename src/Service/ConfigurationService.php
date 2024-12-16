@@ -6,10 +6,15 @@ namespace Dbp\Relay\VerityConnectorVerapdfBundle\Service;
 
 class ConfigurationService
 {
-    private $config;
+    private array $config = [];
 
     public function setConfig(array $config): void
     {
         $this->config = $config;
+    }
+
+    public function getConfig(): array
+    {
+        return $this->config;
     }
 }
