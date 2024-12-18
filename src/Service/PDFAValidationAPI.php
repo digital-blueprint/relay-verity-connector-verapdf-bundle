@@ -29,7 +29,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
     {
         $bundleConfig = $this->configurationService->getConfig();
         $serverUrl = $bundleConfig['url'];
-        $maxsize =  $bundleConfig['maxsize'];
+        $maxsize = $bundleConfig['maxsize'];
 
         if ($fileSize > $maxsize) {
             throw new \Exception("File size exceeded maxsize: {$fileSize} > {$maxsize}");
