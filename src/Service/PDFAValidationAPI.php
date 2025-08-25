@@ -84,7 +84,13 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
         }
 
         $res = json_decode($content, true);
-        $validationResult = $res['report']['jobs'][0]['validationResult'][0];
+        // ensure compatability between veraPDF-rest versions
+        if (array_key_exists('compliant',$res['report']['jobs'][0]['validationResult'])) {
+            $validationResult = $res['report']['jobs'][0]['validationResult'];
+        } else {
+            // TODO find a more elegant solution?
+            $validationResult = $res['report']['jobs'][0]['validationResult'][0];
+        }
         $result->validity = $validationResult['compliant'];
         $result->message = $validationResult['statement'];
         $result->profileNameUsed = $validationResult['profileName'];
