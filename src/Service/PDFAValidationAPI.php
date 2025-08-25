@@ -84,8 +84,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
         }
 
         $res = json_decode($content, true);
-        $validationResult = $res['report']['jobs'][0]['validationResult'];
-
+        $validationResult = $res['report']['jobs'][0]['validationResult'][0];
         $result->validity = $validationResult['compliant'];
         $result->message = $validationResult['statement'];
         $result->profileNameUsed = $validationResult['profileName'];
