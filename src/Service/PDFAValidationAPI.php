@@ -85,7 +85,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
 
         $res = json_decode($content, true);
         // ensure compatability between veraPDF-rest versions
-        if (array_key_exists('compliant',$res['report']['jobs'][0]['validationResult'])) {
+        if (array_key_exists('compliant', $res['report']['jobs'][0]['validationResult'])) {
             $validationResult = $res['report']['jobs'][0]['validationResult'];
         } else {
             // TODO find a more elegant solution?
