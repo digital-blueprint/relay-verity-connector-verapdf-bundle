@@ -9,6 +9,7 @@ use Dbp\Relay\VerityConnectorVerapdfBundle\Service\PDFAValidationAPI;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpFoundation\File\File;
 
 class VeraAPITest extends KernelTestCase
 {
@@ -31,11 +32,17 @@ class VeraAPITest extends KernelTestCase
 
         $this->assertNotNull($veraApi);
 
-        // Parameters in this call do not matter, always get the $validMockResponse.
-        // This tests that a valid PDF is processed correctly.
-        $result = $veraApi->validate('', 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
+        $tempDir = sys_get_temp_dir();
+        $filePath = tempnam($tempDir, 'dummy_verity_connector_verapdf_');
+        try {
+            // Parameters in this call do not matter, always get the $validMockResponse.
+            // This tests that a valid PDF is processed correctly.
+            $result = $veraApi->validate(new File($filePath), 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
 
-        $this->assertEquals('PDF file is compliant with Validation Profile requirements.', $result->message);
+            $this->assertEquals('PDF file is compliant with Validation Profile requirements.', $result->message);
+        } finally {
+            unlink($filePath);
+        }
     }
 
     public function testInvalidResult(): void
@@ -45,11 +52,17 @@ class VeraAPITest extends KernelTestCase
 
         $this->assertNotNull($veraApi);
 
-        // Parameters in this call do not matter, always get the $validMockResponse.
-        // This tests that an invalid PDF is processed correctly.
-        $result = $veraApi->validate('', 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
+        $tempDir = sys_get_temp_dir();
+        $filePath = tempnam($tempDir, 'dummy_verity_connector_verapdf_');
+        try {
+            // Parameters in this call do not matter, always get the $validMockResponse.
+            // This tests that an invalid PDF is processed correctly.
+            $result = $veraApi->validate(new File($filePath), 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
 
-        $this->assertEquals('PDF file is not compliant with Validation Profile requirements.', $result->message);
+            $this->assertEquals('PDF file is not compliant with Validation Profile requirements.', $result->message);
+        } finally {
+            unlink($filePath);
+        }
     }
 
     public function testNotFound(): void
@@ -59,11 +72,18 @@ class VeraAPITest extends KernelTestCase
 
         $this->assertNotNull($veraApi);
 
-        // Parameters in this call do not matter, always get the $validMockResponse.
-        // This tests that a network error is processed correctly.
-        $result = $veraApi->validate('', 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
+        $tempDir = sys_get_temp_dir();
+        $filePath = tempnam($tempDir, 'dummy_verity_connector_verapdf_');
 
-        $this->assertEquals('Network Error', $result->message);
+        try {
+            // Parameters in this call do not matter, always get the $validMockResponse.
+            // This tests that a network error is processed correctly.
+            $result = $veraApi->validate(new File($filePath), 'test-010.txt', 0, sha1(''), '{"flavour": "unit_test"}', 'text/plain');
+
+            $this->assertEquals('Network Error', $result->message);
+        } finally {
+            unlink($filePath);
+        }
     }
 
     private function validMockResponse(): MockResponse
