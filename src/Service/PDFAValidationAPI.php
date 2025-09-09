@@ -25,7 +25,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
     {
     }
 
-    public function validate($fileContent, $fileName, $fileSize, $sha1sum, $config, $mimetype): VerityResult
+    public function validate($file, $fileName, $fileSize, $sha1sum, $config, $mimetype): VerityResult
     {
         $bundleConfig = $this->configurationService->getConfig();
         $serverUrl = $bundleConfig['url'];
@@ -41,11 +41,9 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
         }
         $flavour = $checkConfig['flavour'];
         $url = "$serverUrl/api/validate/$flavour/";
-
-        $fileHandle = fopen('data://text/plain,'.urlencode($fileContent), 'rb');
+        $fileHandle = fopen('data://text/plain,'.urlencode($file->getContent()), 'rb');
         stream_context_set_option($fileHandle, 'http', 'filename', $fileName);
         stream_context_set_option($fileHandle, 'http', 'content_type', $mimetype);
-
         $response = null;
         try {
             $response = $this->httpClient->request('POST', $url, [
@@ -69,8 +67,9 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
                 $statusCode = 500;
                 $content = 'Internal Server Error';
             }
+        } finally {
+            fclose($fileHandle);
         }
-
         $result = new VerityResult();
         $result->profileNameRequested = $flavour;
 
@@ -101,7 +100,6 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
                 }
             }
         }
-
         return $result;
     }
 }
