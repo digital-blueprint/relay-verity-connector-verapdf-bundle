@@ -100,6 +100,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
                 }
             }
         }
+
         return $result;
     }
 }
