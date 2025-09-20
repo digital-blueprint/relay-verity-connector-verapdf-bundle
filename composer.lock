@@ -335,11 +335,11 @@
         },
         {
             "name": "dbp/relay-verity-bundle",
-            "version": "v0.1.5",
+            "version": "v0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/digital-blueprint/relay-verity-bundle.git",
-                "reference": "3868d8fd69a8351b478b3e483b4fbca86b1d7f2c"
+                "reference": "748dfa2bb291a506413fed6400511c40735496ca"
             },
             "require": {
                 "api-platform/core": "^3.4 || ^4.1",
@@ -407,7 +407,7 @@
                 "AGPL-3.0-or-later"
             ],
             "description": "A validation bundle for the Relay API gateway",
-            "time": "2025-09-09T09:37:04+00:00"
+            "time": "2025-09-16T12:34:04+00:00"
         },
         {
             "name": "doctrine/collections",
