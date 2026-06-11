@@ -12,6 +12,7 @@ use Dbp\Relay\VerityBundle\Helpers\VerityResult;
 use Dbp\Relay\VerityBundle\Service\VerityProviderInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -25,7 +26,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
     {
     }
 
-    public function validate($file, $fileName, $fileSize, $sha1sum, $config, $mimetype): VerityResult
+    public function validate(File $file, string $fileName, int $fileSize, string $fileHash, string $config, string $mimetype): VerityResult
     {
         $bundleConfig = $this->configurationService->getConfig();
         $serverUrl = $bundleConfig['url'];
@@ -41,6 +42,10 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
         }
         $flavour = $checkConfig['flavour'];
         $url = "$serverUrl/api/validate/$flavour/";
+        $sha1 = sha1_file($file->getPathname());
+        if ($sha1 === false) {
+            throw new \RuntimeException('Hashing file failed');
+        }
         $fileHandle = fopen('data://text/plain,'.urlencode($file->getContent()), 'rb');
         stream_context_set_option($fileHandle, 'http', 'filename', $fileName);
         stream_context_set_option($fileHandle, 'http', 'content_type', $mimetype);
@@ -53,7 +58,7 @@ class PDFAValidationAPI implements VerityProviderInterface, LoggerAwareInterface
                     'Content-Type: multipart/form-data',
                 ],
                 'body' => [
-                    'sha1Hex' => $sha1sum,
+                    'sha1Hex' => $sha1,
                     'file' => $fileHandle,
                 ],
             ]);
